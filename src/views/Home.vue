@@ -20,7 +20,7 @@
       </p>
       <form @submit.prevent="submitSignup" class="signup-form">
         <input v-model="email" type="email" placeholder="Digite seu e-mail" required />
-        <button type="submit">Cadastrar</button>
+        <button type="submit" class="cdst_button">Cadastrar</button>
       </form>
     </section>
 
@@ -64,6 +64,7 @@ const scrollToSignup = () => {
   text-align: center;
   padding: 200px 20px;
   height: 100vh;
+  margin-top: -2px;
 }
 
 .hero-overlay {
@@ -91,20 +92,25 @@ const scrollToSignup = () => {
   font-size: 1.2rem;
   margin-bottom: 2rem;
 }
-
+.cdst_button{
+  height: 55px;
+  width: auto;
+}
 .cta-button {
   padding: 1rem 2.5rem;
-  background-color: #fc4323;
+  background-color: #f13615;
   color: white;
   border: none;
   border-radius: 30px;
   cursor: pointer;
   font-size: 1.2rem;
-  transition: background-color 0.3s ease;
+  transition: transform 0.8s ease;
+  transform: scale(1);
 }
 
 .cta-button:hover {
   background-color: #e55347;
+  transform: scale(1.05);
 }
 
 .signup-section {
