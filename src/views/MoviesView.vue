@@ -20,8 +20,8 @@ const listMovies = async (genreId) => {
   const response = await api.get('discover/movie', {
     params: {
       with_genres: genreId,
-      language: 'pt-BR',
-    },
+      language: 'pt-BR'
+    }
   })
   movies.value = response.data.results
   isLoading.value = false
@@ -112,7 +112,9 @@ onMounted(async () => {
   font-weight: bold;
   cursor: pointer;
   text-align: center;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
 }
 
 .genre-item:hover {
@@ -127,7 +129,10 @@ onMounted(async () => {
 /* Lista de Filmes */
 .movie-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Ajustado para 200px como os programas de TV */
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(200px, 1fr)
+  ); /* Ajustado para 200px como os programas de TV */
   gap: 1.2rem;
   padding: 0 1.5rem;
   justify-content: center;
@@ -185,7 +190,9 @@ onMounted(async () => {
   font-size: 0.8rem;
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
 }
 
 .movie-genres span:hover {

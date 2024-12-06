@@ -18,10 +18,7 @@
     <section class="production-companies">
       <h2>Produtoras</h2>
       <div class="companies">
-        <template
-          v-for="company in movieStore.currentMovie.production_companies"
-          :key="company.id"
-        >
+        <template v-for="company in movieStore.currentMovie.production_companies" :key="company.id">
           <img
             v-if="company.logo_path"
             :src="`https://image.tmdb.org/t/p/w92${company.logo_path}`"
@@ -36,20 +33,20 @@
 </template>
 
 <script setup>
-import { defineProps, onMounted } from 'vue';
-import { useMovieStore } from '@/stores/movie';
-const movieStore = useMovieStore();
+import { defineProps, onMounted } from 'vue'
+import { useMovieStore } from '@/stores/movie'
+const movieStore = useMovieStore()
 
 const props = defineProps({
   movieId: {
     type: Number,
-    required: true,
-  },
-});
+    required: true
+  }
+})
 
 onMounted(async () => {
-  await movieStore.getMovieDetail(props.movieId);
-});
+  await movieStore.getMovieDetail(props.movieId)
+})
 </script>
 
 <style scoped>

@@ -1,9 +1,7 @@
 <template>
   <div class="tv-view-container">
-  
     <h1 class="page-title">Programas de TV</h1>
 
-   
     <div class="genre-list">
       <div
         v-for="genre in genres"
@@ -16,11 +14,15 @@
       </div>
     </div>
 
-  
     <loading v-model:active="isLoading" is-full-page />
 
     <div class="movie-list">
-      <div v-for="tvShow in movies" :key="tvShow.id" class="movie-card" @click="openTvShow(tvShow.id)">
+      <div
+        v-for="tvShow in movies"
+        :key="tvShow.id"
+        class="movie-card"
+        @click="openTvShow(tvShow.id)"
+      >
         <img
           :src="`https://image.tmdb.org/t/p/w500${tvShow.poster_path}`"
           :alt="tvShow.name"
@@ -52,38 +54,38 @@ import Loading from 'vue-loading-overlay'
 import useGenreStore from '@/stores/genre'
 import { useRouter } from 'vue-router'
 
-const genreStore = useGenreStore();
-const router = useRouter();
-const isLoading = ref(false);
-const genres = ref([]);
-const movies = ref([]);
-const currentGenreId = ref(null);
+const genreStore = useGenreStore()
+const router = useRouter()
+const isLoading = ref(false)
+const genres = ref([])
+const movies = ref([])
+const currentGenreId = ref(null)
 
-const getGenreName = (id) => genres.value.find((genre) => genre.id === id)?.name || 'Desconhecido';
+const getGenreName = (id) => genres.value.find((genre) => genre.id === id)?.name || 'Desconhecido'
 
 const listMovies = async (genreId) => {
-  currentGenreId.value = genreId;
-  isLoading.value = true;
+  currentGenreId.value = genreId
+  isLoading.value = true
   const response = await api.get('discover/tv', {
     params: {
       with_genres: genreId,
-      language: 'pt-BR',
-    },
-  });
-  movies.value = response.data.results;
-  isLoading.value = false;
-};
+      language: 'pt-BR'
+    }
+  })
+  movies.value = response.data.results
+  isLoading.value = false
+}
 
 const openTvShow = (tvShowId) => {
-  router.push({ name: 'TvShowDetails', params: { tvShowId } });
-};
+  router.push({ name: 'TvShowDetails', params: { tvShowId } })
+}
 
 onMounted(async () => {
-  isLoading.value = true;
-  const response = await api.get('genre/tv/list?language=pt-BR');
-  genres.value = response.data.genres;
-  isLoading.value = false;
-});
+  isLoading.value = true
+  const response = await api.get('genre/tv/list?language=pt-BR')
+  genres.value = response.data.genres
+  isLoading.value = false
+})
 </script>
 
 <style scoped>
@@ -114,7 +116,9 @@ onMounted(async () => {
   font-weight: bold;
   cursor: pointer;
   text-align: center;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
 }
 
 .genre-item:hover {
@@ -187,7 +191,9 @@ onMounted(async () => {
   font-size: 0.9rem;
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
 }
 
 .movie-genres span:hover {
