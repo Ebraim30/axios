@@ -12,8 +12,7 @@
         <p class="overview">{{ movieStore.currentMovie.overview }}</p>
         <p><strong>Orçamento:</strong> ${{ movieStore.currentMovie.budget.toLocaleString() }}</p>
         <p><strong>Avaliação:</strong> {{ movieStore.currentMovie.vote_average }}/10</p>
-      </div>
-    </div>
+ 
 
     <section class="production-companies">
       <h2>Produtoras</h2>
@@ -29,6 +28,8 @@
         </template>
       </div>
     </section>
+  </div>
+</div>
   </div>
 </template>
 
@@ -51,8 +52,11 @@ onMounted(async () => {
 
 <style scoped>
 .movie-details-container {
+  margin-top: -5px;
   padding: 2rem;
-  background-color: #f7f7f7;
+  background-color: #000000;
+  color:#ffffff;
+  font-size: 25px
 }
 
 .movie-header {
@@ -62,7 +66,7 @@ onMounted(async () => {
 }
 
 .movie-poster {
-  width: 250px;
+  width: 400px;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
@@ -90,7 +94,8 @@ onMounted(async () => {
 }
 
 .production-companies {
-  margin-top: 3rem;
+  margin-top: 6rem;
+  overflow: hidden;
 }
 
 .companies {
@@ -103,6 +108,7 @@ onMounted(async () => {
 .company-logo {
   max-width: 120px;
   margin-bottom: 1rem;
+  margin-right: 50px;
 }
 
 .company-logo:hover {

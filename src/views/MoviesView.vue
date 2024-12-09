@@ -90,7 +90,8 @@ onMounted(async () => {
   font-size: 2.5rem;
   font-weight: 700;
   color: #2c3e50;
-  margin-bottom: 1.5rem;
+  margin-top: 120px;
+  margin-bottom: 40px;
   font-family: 'Arial', sans-serif;
 }
 
@@ -131,7 +132,7 @@ onMounted(async () => {
   display: grid;
   grid-template-columns: repeat(
     auto-fill,
-    minmax(200px, 1fr)
+    minmax(400px, 1fr)
   ); /* Ajustado para 200px como os programas de TV */
   gap: 1.2rem;
   padding: 0 1.5rem;
@@ -140,7 +141,7 @@ onMounted(async () => {
 
 .movie-card {
   width: 100%;
-  height: 20rem; /* Tamanho similar aos Programas de TV */
+  height: 45rem; /* Tamanho similar aos Programas de TV */
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -153,9 +154,8 @@ onMounted(async () => {
 }
 
 .movie-poster {
-  width: 100%;
+  width: 50%;
   height: 50%; /* Imagem ocupa 50% do cartão */
-  object-fit: cover;
   border-radius: 12px;
 }
 

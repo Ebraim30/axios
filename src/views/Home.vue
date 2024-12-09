@@ -23,7 +23,6 @@
         <button type="submit" class="cdst_button">Cadastrar</button>
       </form>
     </section>
-
   </div>
 </template>
 
@@ -92,7 +91,7 @@ const scrollToSignup = () => {
   font-size: 1.2rem;
   margin-bottom: 2rem;
 }
-.cdst_button{
+.cdst_button {
   height: 55px;
   width: auto;
 }
