@@ -97,7 +97,7 @@ const scrollToSignup = () => {
 }
 .cta-button {
   padding: 1rem 2.5rem;
-  background-color: #f13615;
+  background-color: #ff2600;
   color: white;
   border: none;
   border-radius: 30px;
@@ -105,6 +105,7 @@ const scrollToSignup = () => {
   font-size: 1.2rem;
   transition: transform 0.8s ease;
   transform: scale(1);
+  font-weight: bold;
 }
 
 .cta-button:hover {

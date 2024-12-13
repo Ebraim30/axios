@@ -10,8 +10,8 @@
         <h1>{{ movieStore.currentMovie.title }}</h1>
         <p class="tagline">{{ movieStore.currentMovie.tagline }}</p>
         <p class="overview">{{ movieStore.currentMovie.overview }}</p>
-        <p><strong>Orçamento:</strong> ${{ movieStore.currentMovie.budget.toLocaleString() }}</p>
-        <p><strong>Avaliação:</strong> {{ movieStore.currentMovie.vote_average }}/10</p>
+        <p><strong>Orçamento:</strong> ${{ movieStore.currentMovie.budget }}   💸</p>
+        <p><strong>Avaliação:</strong> {{ movieStore.currentMovie.vote_average }}/10⭐</p>
  
 
     <section class="production-companies">
@@ -94,8 +94,11 @@ onMounted(async () => {
 }
 
 .production-companies {
-  margin-top: 6rem;
+  margin-top: 9rem;
   overflow: hidden;
+  background-color: #ffffffff;
+  align-items: center;
+  border-radius: 50px;
 }
 
 .companies {
@@ -108,7 +111,9 @@ onMounted(async () => {
 .company-logo {
   max-width: 120px;
   margin-bottom: 1rem;
-  margin-right: 50px;
+  margin-right: -80px;
+  margin-left: 130px;
+  align-items: center;
 }
 
 .company-logo:hover {
@@ -117,8 +122,10 @@ onMounted(async () => {
 }
 
 .production-companies h2 {
-  font-size: 2rem;
+  font-size: 3rem;
+  text-align: center;
   font-weight: 700;
-  margin-bottom: 1rem;
+  margin-bottom: 3rem;
+  color: #000000;
 }
 </style>

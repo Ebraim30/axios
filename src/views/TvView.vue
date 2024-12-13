@@ -93,7 +93,7 @@ onMounted(async () => {
 .page-title {
   text-align: center;
   font-size: 3rem;
-  font-weight: 700;
+  font-weight: bold;
   color: #2c3e50;
   margin-bottom: 2rem;
 }
@@ -101,24 +101,26 @@ onMounted(async () => {
 /* Lista de Gêneros */
 .genre-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 1rem;
-  margin-bottom: 2rem;
-  padding: 0 2rem;
+  grid-template-columns: 1fr 1fr 1fr 1fr; 
+  grid-template-rows: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+  max-width: 1000px;
+  margin-bottom: 20px;
+  margin-left: 250px;
 }
 
 .genre-item {
-  background-color: #3498db; /* Azul Claro */
-  padding: 0.8rem 1.5rem;
-  border-radius: 25px;
-  color: #fff;
+  background: linear-gradient(135deg, #007bff, #0056d8);
+  color: white;
   font-size: 1rem;
   font-weight: bold;
-  cursor: pointer;
   text-align: center;
-  transition:
-    background-color 0.3s ease,
-    transform 0.2s ease;
+  padding: 10px 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
 }
 
 .genre-item:hover {
@@ -163,10 +165,11 @@ onMounted(async () => {
 .movie-details {
   padding: 1rem;
   text-align: center;
+  zoom: 0.6;
 }
 
 .movie-title {
-  font-size: 1.2rem;
+  font-size: 1.8rem;
   font-weight: bold;
   color: #333;
   margin-bottom: 0.5rem;
@@ -175,11 +178,12 @@ onMounted(async () => {
 .movie-release-date {
   font-size: 0.9rem;
   color: #777;
+  margin-bottom: 20px;
 }
 
 .movie-genres {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.2rem;
   justify-content: center;
 }
 

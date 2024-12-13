@@ -20,7 +20,7 @@ header {
   top: 0;
   left: 0;
   width: 100%;
-  background-color: #333;
+  background-color: #252525;
   padding: 1rem;
   display: flex;
   justify-content: center;
@@ -35,14 +35,18 @@ nav {
 
 nav a {
   text-decoration: none;
-  color: #fff;
+  color: #ffffff;
   font-size: 1.2rem;
   font-weight: bold;
   transition: color 0.3s ease;
+  position: relative;
+  transition: transform 0.8s ease;
 }
 
 nav a:hover {
-  color: #f1c40f;
+  color: #f10f0f;
+  transform: translateX(6px);
+  animation: 0.2s;
 }
 
 main {

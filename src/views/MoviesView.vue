@@ -98,24 +98,27 @@ onMounted(async () => {
 /* Lista de Gêneros */
 .genre-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-  padding: 0 2rem;
+  grid-template-columns: 1fr 1fr 1fr; 
+  grid-template-rows: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+  max-width: 1000px;
+  border-radius: 60px;
+  margin-bottom: 20px;
+  margin-left: 250px;
 }
 
 .genre-item {
-  background-color: #1e90ff; /* Azul forte */
-  padding: 0.6rem 1.2rem;
-  border-radius: 20px;
-  color: #fff;
-  font-size: 0.95rem;
+  background: linear-gradient(135deg, #007bff, #0056d8);
+  color: white;
+  font-size: 1rem;
   font-weight: bold;
-  cursor: pointer;
   text-align: center;
-  transition:
-    background-color 0.3s ease,
-    transform 0.2s ease;
+  padding: 10px 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
 }
 
 .genre-item:hover {
