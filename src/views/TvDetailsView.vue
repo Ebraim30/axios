@@ -1,18 +1,18 @@
 <script setup>
 import { onMounted } from 'vue';
-import { useMovieStore } from '@/stores/movie';
+import { useTvStore } from '@/stores/tv';
 
-const movieStore = useMovieStore();
+const tvStore = useTvStore();
 
 const props = defineProps({
-    movieId: {
+    tvId: {
         type: String,
         required: true,
     },
 });
 
 onMounted(async () => {
-    await movieStore.getMovieDetail(props.movieId);
+    await tvStore.getTvDetail(props.tvId);
 });
 
 // Função para formatar números como valores monetários
@@ -27,27 +27,27 @@ const formatCurrency = (value) => {
 <template>
     <div class="main">
         <div class="content">
-            <img :src="`https://image.tmdb.org/t/p/w185${movieStore.currentMovie.poster_path}`"
-                :alt="movieStore.currentMovie.title" class="poster" />
+            <img :src="`https://image.tmdb.org/t/p/w185${tvStore.currentTv.poster_path}`"
+                :alt="tvStore.currentTv.name" class="poster" />
 
             <div class="details">
-                <h1 class="title">{{ movieStore.currentMovie.title }}</h1>
-                <p class="tagline">{{ movieStore.currentMovie.tagline }}</p>
-                <p class="overview">{{ movieStore.currentMovie.overview }}</p>
-                <p class="rating">Avaliação: {{ movieStore.currentMovie.vote_average }} ⭐</p>
+                <h1 class="title">{{ tvStore.currentTv.name }}</h1>
+                <p class="tagline">{{ tvStore.currentTv.tagline }}</p>
+                <p class="overview">{{ tvStore.currentTv.overview }}</p>
+                <p class="rating">Avaliação: {{ tvStore.currentTv.vote_average }} ⭐</p>
             </div>
         </div>
 
-        <div class="financial-summary">
+        <div class="financial-info">
             <h2>Informações Financeiras</h2>
+            <p><strong>Orçamento:</strong> {{ formatCurrency(20000000) }} 💰</p>
             <p><strong>Receita:</strong> {{ formatCurrency(50000000) }} 💸</p>
-            <p class="financial-info">Orçamento: <span class="budget-value">R$ 250.000.000,00</span> 💰</p>
-            <p><strong>Duração:</strong> {{ movieStore.currentMovie.runtime }} minutos</p>
+            <p><strong>Duração:</strong> {{ tvStore.currentTv.runtime }} minutos</p>
         </div>
 
         <p class="companies-title">Produtoras</p>
         <div class="companies">
-            <template v-for="company in movieStore.currentMovie.production_companies" :key="company.id">
+            <template v-for="company in tvStore.currentTv.production_companies" :key="company.id">
                 <img v-if="company.logo_path" :src="`https://image.tmdb.org/t/p/w92${company.logo_path}`" :alt="company.name" class="company-logo" />
                 <p v-else>{{ company.name }}</p>
             </template>
@@ -83,7 +83,7 @@ body {
     animation: portalAnimation 3s ease-in-out infinite;
 }
 
-/* Título do filme */
+/* Título da série */
 .title {
     font-size: 2rem;
     text-align: center;
@@ -92,7 +92,7 @@ body {
     font-weight: bold;
 }
 
-/* Detalhes do filme */
+/* Detalhes da série */
 .details {
     background: rgba(0, 255, 0, 0.1); /* Leve fundo esverdeado */
     padding: 1.5rem;
@@ -102,7 +102,7 @@ body {
 
 .tagline {
     font-size: 1.1rem;
-    color: #000000; /* Tom de cinza para suavizar a tagline */
+    color: #888; /* Tom de cinza para suavizar a tagline */
     font-style: italic;
     margin-top: 1rem;
 }
@@ -113,18 +113,6 @@ body {
     margin-top: 1rem;
 }
 
-.financial-info {
-    font-size: 1.1rem;
-    margin-top: 1rem;
-    color: #ff9000; /* Cor padrão da frase */
-    font-weight: bold;
-}
-
-.budget-value {
-    color: #ffffff; /* Cor branca apenas para o número */
-}
-
-
 .rating {
     font-size: 1.1rem;
     color: #ffbb33; /* Cor para a avaliação */
@@ -132,7 +120,7 @@ body {
 }
 
 /* Informações financeiras */
-.financial-summary {
+.financial-info {
     background-color: #282828;
     padding: 2rem;
     margin-top: 2rem;
@@ -141,18 +129,18 @@ body {
     color: #fff;
 }
 
-.financial-summary h2 {
+.financial-info h2 {
     font-size: 1.8rem;
     color: #32bba7;
     margin-bottom: 1.5rem;
 }
 
-.financial-summary p {
+.financial-info p {
     font-size: 1.1rem;
     margin-bottom: 0.5rem;
 }
 
-.financial-summary strong {
+.financial-info strong {
     font-weight: bold;
     color: #ff9000;
 }

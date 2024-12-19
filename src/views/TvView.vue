@@ -1,70 +1,18 @@
-<template>
-  <div class="tv-view-container">
-    <h1 class="page-title">Programas de TV</h1>
-
-    <div class="genre-list">
-      <div
-        v-for="genre in genres"
-        :key="genre.id"
-        @click="listMovies(genre.id)"
-        class="genre-item"
-        :class="{ active: genre.id === currentGenreId }"
-      >
-        {{ genre.name }}
-      </div>
-    </div>
-
-    <loading v-model:active="isLoading" is-full-page />
-
-    <div class="movie-list">
-      <div
-        v-for="tvShow in movies"
-        :key="tvShow.id"
-        class="movie-card"
-        @click="openTvShow(tvShow.id)"
-      >
-        <img
-          :src="`https://image.tmdb.org/t/p/w500${tvShow.poster_path}`"
-          :alt="tvShow.name"
-          class="movie-poster"
-        />
-        <div class="movie-details">
-          <p class="movie-title">{{ tvShow.name }}</p>
-          <p class="movie-release-date">{{ tvShow.first_air_date }}</p>
-          <div class="movie-genres">
-            <span
-              v-for="genre_id in tvShow.genre_ids"
-              :key="genre_id"
-              @click="listMovies(genre_id)"
-              :class="{ active: genre_id === currentGenreId }"
-            >
-              {{ getGenreName(genre_id) }}
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup>
 import { ref, onMounted } from 'vue'
 import api from '@/plugins/axios'
 import Loading from 'vue-loading-overlay'
-import useGenreStore from '@/stores/genre'
+import genreStore from '@/stores/genre'
 import { useRouter } from 'vue-router'
 
-const genreStore = useGenreStore()
 const router = useRouter()
 const isLoading = ref(false)
-const genres = ref([])
-const movies = ref([])
-const currentGenreId = ref(null)
+const tvs = ref([])
 
-const getGenreName = (id) => genres.value.find((genre) => genre.id === id)?.name || 'Desconhecido'
+const formatDate = (date) => new Date(date).toLocaleDateString('pt-BR')
 
-const listMovies = async (genreId) => {
-  currentGenreId.value = genreId
+const listTvs = async (genreId) => {
+  genreStore.setCurrentGenreId(genreId)
   isLoading.value = true
   const response = await api.get('discover/tv', {
     params: {
@@ -72,140 +20,323 @@ const listMovies = async (genreId) => {
       language: 'pt-BR'
     }
   })
-  movies.value = response.data.results
+  tvs.value = response.data.results
   isLoading.value = false
 }
 
-const openTvShow = (tvShowId) => {
-  router.push({ name: 'TvShowDetails', params: { tvShowId } })
+function openTv(tvId) {
+  router.push({ name: 'SeriesDetails', params: { tvId } })
 }
 
 onMounted(async () => {
   isLoading.value = true
-  const response = await api.get('genre/tv/list?language=pt-BR')
-  genres.value = response.data.genres
+  await genreStore.getAllGenres('tv')
+  
+  // Encontrar o gênero "Soap" pelo nome e definí-lo como o gênero atual
+  const soapGenre = genreStore.genres.find(genre => genre.name.toLowerCase() === 'soap')
+  
+  if (soapGenre) {
+    genreStore.setCurrentGenreId(soapGenre.id)
+    await listTvs(soapGenre.id)  // Carregar as séries do gênero "Soap"
+  }
+
   isLoading.value = false
 })
+
 </script>
 
+<template>
+  <h1 class="page-title">Séries</h1>
+  <ul class="genre-list">
+    <li
+      v-for="genre in genreStore.genres"
+      :key="genre.id"
+      @click="listTvs(genre.id)"
+      class="genre-item"
+      :class="{ active: genre.id === genreStore.currentGenreId }"
+    >
+      {{ genre.name }}
+    </li>
+  </ul>
+
+  <loading v-model:active="isLoading" is-full-page />
+
+  <div class="tv-list">
+    <div v-for="tv in tvs" :key="tv.id" class="tv-card">
+      <img
+        :src="`https://image.tmdb.org/t/p/w500${tv.poster_path}`"
+        :alt="tv.name"
+        @click="openTv(tv.id)"
+        class="tv-image"
+      />
+      <div class="tv-details">
+        <p class="tv-title">{{ tv.name }}</p>
+        <p class="tv-first-air-date">{{ formatDate(tv.first_air_date) }}</p>
+        <p class="tv-genres">
+          <span
+            v-for="genre_id in tv.genre_ids"
+            :key="genre_id"
+            @click="listTvs(genre_id)"
+            :class="{ active: genre_id === genreStore.currentGenreId }"
+          >
+            {{ genreStore.getGenreName(genre_id) }}
+          </span>
+        </p>
+      </div>
+    </div>
+  </div>
+</template>
+
 <style scoped>
-/* Título da Página */
+/* Geral */
 .page-title {
   text-align: center;
-  font-size: 3rem;
-  font-weight: bold;
-  color: #2c3e50;
-  margin-bottom: 2rem;
+  font-family: 'Rick and Morty', sans-serif;
+  font-size: 4rem;
+  color: #32bba7;
+  text-shadow: 0 0 15px #32bba7, 0 0 25px #00ff00, 0 0 35px #00ff00;
+  margin-bottom: 3rem;
+  animation: text-flicker 2s infinite ease-in-out, glowing 1.5s ease-in-out infinite;
+}
+
+@keyframes text-flicker {
+  0%, 50%, 100% {
+    opacity: 1;
+  }
+  25%, 75% {
+    opacity: 0.3;
+  }
+}
+
+@keyframes glowing {
+  0% {
+    text-shadow: 0 0 5px #32bba7, 0 0 10px #00ff00, 0 0 15px #00ff00;
+  }
+  50% {
+    text-shadow: 0 0 10px #32bba7, 0 0 20px #00ff00, 0 0 30px #00ff00;
+  }
+  100% {
+    text-shadow: 0 0 5px #32bba7, 0 0 10px #00ff00, 0 0 15px #00ff00;
+  }
 }
 
 /* Lista de Gêneros */
 .genre-list {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr; 
-  grid-template-rows: 1fr 1fr;
-  gap: 12px;
-  width: 100%;
-  max-width: 1000px;
-  margin-bottom: 20px;
-  margin-left: 250px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  list-style: none;
+  margin-bottom: 3rem;
 }
 
 .genre-item {
-  background: linear-gradient(135deg, #007bff, #0056d8);
-  color: white;
-  font-size: 1rem;
+  background-color: #32bba7;
+  border-radius: 2rem;
+  padding: 1rem 2rem;
+  color: #fff;
   font-weight: bold;
-  text-align: center;
-  padding: 10px 15px;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s, box-shadow 0.3s;
   cursor: pointer;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out;
+  position: relative;
+  overflow: hidden;
+  animation: portalEffect 3s ease-in-out infinite; /* Animação de efeito de portal */
+  background-image: url('./public/portalzinho.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  animation: rotateEffect 10s linear infinite; /* Aumento do tempo de rotação */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: center;
+  animation: rotateGenreText 20s linear infinite; /* Aumento do tempo de rotação */
+}
+
+@keyframes rotateEffect {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotateGenreText {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes portalEffect {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 2rem #00ff00;
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.15);
+    box-shadow: 0 0 5rem #00ff00;
+    opacity: 1;
+  }
 }
 
 .genre-item:hover {
-  background-color: #2980b9; /* Azul Escuro */
-  transform: scale(1.05);
+  background-color: #00ff00;
+  transform: scale(1.1);
+  box-shadow: 0 0 2rem #00ff00;
+  animation: pulse 1.5s ease-in-out infinite;
 }
 
 .genre-item.active {
-  background-color: #1abc9c; /* Verde para gênero ativo */
+  background-color: #00ff00;
+  font-weight: bolder;
 }
 
-/* Lista de Programas de TV */
-.movie-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 2rem;
-  padding: 0 2rem;
+/* Animação de Pulsar */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Card de Séries */
+.tv-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3rem;
   justify-content: center;
+  margin-top: 2rem;
 }
 
-.movie-card {
-  width: 100%;
-  height: 100%;
-  border-radius: 15px;
+.tv-card {
+  width: 18rem;
+  height: 36rem;
+  border-radius: 1.5rem;
   overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
+  box-shadow: 0 0 4rem rgba(0, 0, 0, 0.8);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, opacity 0.3s ease;
+  position: relative;
+  opacity: 0.9;
+  background-color: #000; /* Adicionando fundo preto para combinar com o estilo do movie-card */
+}
+
+.tv-card:hover {
+  transform: translateY(-20px) scale(1.05);
+  box-shadow: 0 0 5rem rgba(0, 0, 0, 0.8);
+  opacity: 1;
+}
+
+.tv-card img {
+  width: 100%;
+  height: 22rem;
+  border-radius: 1.5rem;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  object-fit: cover; /* Garantir que a imagem cubra todo o espaço do card */
+  animation: rotateImage 20s infinite linear;
+}
+
+@keyframes rotateImage {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.tv-card img:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 2rem rgb(1, 255, 14);
+}
+
+.tv-details {
+  padding: 1rem;
+  background-color: rgba(0, 0, 0, 0.85);
+  border-radius: 0 0 1.5rem 1.5rem;
+  color: #fff;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.tv-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  line-height: 1.6rem;
+  margin-bottom: 1rem;
   transition: transform 0.3s ease;
 }
 
-.movie-card:hover {
+.tv-title:hover {
   transform: scale(1.05);
+  color: #00ff00;
 }
 
-.movie-poster {
-  width: 100%;
-  height: 70%;
-  object-fit: cover;
-  border-radius: 15px;
-}
-
-.movie-details {
-  padding: 1rem;
-  text-align: center;
-  zoom: 0.6;
-}
-
-.movie-title {
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: #333;
+.tv-first-air-date {
+  font-size: 1.2rem;
+  color: #ffbb33;
   margin-bottom: 0.5rem;
 }
 
-.movie-release-date {
-  font-size: 0.9rem;
-  color: #777;
-  margin-bottom: 20px;
-}
-
-.movie-genres {
+.tv-genres {
   display: flex;
-  gap: 0.2rem;
+  flex-wrap: wrap;
+  gap: 0.8rem;
   justify-content: center;
+  margin-top: 1rem;
 }
 
-.movie-genres span {
-  background-color: #f39c12; /* Laranja Quente */
-  border-radius: 20px;
-  padding: 0.4rem 0.8rem;
+.tv-genres span {
+  background-color: #6200ff;
+  border-radius: 1rem;
+  padding: 0.4rem 1rem;
   color: #fff;
-  font-size: 0.9rem;
+  font-size: 1.1rem;
   font-weight: bold;
   cursor: pointer;
-  transition:
-    background-color 0.3s ease,
-    transform 0.2s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.movie-genres span:hover {
-  background-color: #e67e22; /* Laranja mais escuro */
-  transform: scale(1.05);
+.tv-genres span:hover {
+  background-color: #6200ff;
+  transform: scale(1.1);
+  box-shadow: 0 0 1rem rgba(255, 165, 0, 0.8);
 }
 
-.movie-genres span.active {
-  background-color: #e74c3c; /* Vermelho para o gênero ativo */
+.tv-genres span.active {
+  background-color: #00ff00;
+  color: #000;
+  font-weight: bolder;
+}
+
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 2.5rem;
+  }
+
+  .tv-card {
+    width: 14rem;
+    height: 28rem;
+  }
+
+  .tv-title {
+    font-size: 1.2rem;
+  }
+
+  .tv-first-air-date {
+    font-size: 1rem;
+  }
+
+  .tv-genres span {
+    font-size: 1rem;
+  }
 }
 </style>
