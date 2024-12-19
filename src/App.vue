@@ -18,11 +18,11 @@ header {
   height: 3rem;
   display: flex;
   background-color: #1a1a1a; /* Fundo mais escuro para o efeito de espaço */
-  color: #ffdd59; /* Amarelo para contraste */
+  color: #9130ff; /* Amarelo para contraste */
   font-size: 1.2rem;
   padding-left: 2rem;
   font-family: 'Get Schwifty', sans-serif;
-  border-bottom: 4px solid #ffdd59;
+  border-bottom: 4px solid #9130ff;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombras sutis */
   animation: navbar-appear 1s ease-out; /* Animação para a barra de navegação */
 }
@@ -36,7 +36,7 @@ nav {
 
 .nav-link {
   text-decoration: none;
-  color: #ffdd59;
+  color: #9130ff;
   position: relative;
   padding: 0.5rem;
   font-weight: bold;
@@ -51,7 +51,7 @@ nav {
   left: 0;
   width: 0;
   height: 2px;
-  background-color: #ffdd59;
+  background-color: #9130ff;
   transition: width 0.3s ease;
 }
 
